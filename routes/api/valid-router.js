@@ -12,6 +12,10 @@ const schemaUpdateContact = Joi.object({
     phone: Joi.string().min(1).max(15).optional(),
 }).or('name', 'email', 'phone')
 
+const schemaUpdateStatusContact = Joi.object({
+    favorite: Joi.boolean().required()
+})
+
 const validate = async (schema, obj, next) => {
     try {
         await schema.validateAsync(obj);
@@ -29,4 +33,8 @@ module.exports = {
      validationUpdateContact: async (req, res, next) => {
         return await validate(schemaUpdateContact, req.body, next)
     },
+    validationUpdateStatusContact: async (req, res, next) => {
+        
+        return await validate(schemaUpdateStatusContact, req.body, next)
+     }
 }
