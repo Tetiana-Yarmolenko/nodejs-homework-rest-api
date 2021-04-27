@@ -3,7 +3,8 @@ const router = express.Router()
 
 const Contact = require('../../model/index.js')
 const { validationCreateContact,
-  validationUpdateContact } = require('./valid-router');
+  validationUpdateContact,
+  validationUpdateStatusContact } = require('./valid-router');
 
 
 router.get("/", async (req, res, next) => {
@@ -74,8 +75,8 @@ router.post('/', validationCreateContact, async (req, res, next) => {
 })
 
 router.delete('/:contactId', async (req, res, next) => {
- try {
-    const contact = await Contact.removeContact(req.params.contactId);
+  try {
+   const contact = await Contact.removeContact(req.params.contactId);
     if (contact) {
       return res.json({
         status: 'success',
@@ -98,7 +99,7 @@ router.delete('/:contactId', async (req, res, next) => {
 
 
 router.put('/:contactId', validationUpdateContact,  async (req, res, next) => {
- try {
+  try {
     const contact = await Contact.updateContact(req.params.contactId, req.body);
     if (contact) {
       return res.json({
@@ -122,29 +123,29 @@ router.put('/:contactId', validationUpdateContact,  async (req, res, next) => {
   }
 })
 
-// router.patch('/:contactId', async (req, res, next) => {
-//  try {
-//     const contact = await Contact.updateContact(req.params.id, req.body);
-//     if (contact) {
-//       return res.json({
-//         status: 'success',
-//         code: 200,
-//         data: {
-//           contact,
-//         },
-//       })
-//     }
-//     else {
-//       return res.status(404).json({
-//         status: 'error',
-//         code: 404,
-//         data: 'Not Found',
-//       })
-//     }
-//   }
-//   catch (error) {
-//     next(error)
-//   }
-// })
+router.patch('/:contactId/favorite', validationUpdateStatusContact, async (req, res, next) => {
+  try {
+    const contact = await Contact.updateContact(req.params.contactId, req.body);
+    if (contact) {
+      return res.json({
+        status: 'success',
+        code: 200,
+        data: {
+          contact,
+        },
+      })
+    }
+    else {
+      return res.status(404).json({
+        status: 'error',
+        code: 404,
+        data: 'Not Found',
+      })
+    }
+  }
+  catch (error) {
+    next(error)
+  }
+})
 
 module.exports = router
