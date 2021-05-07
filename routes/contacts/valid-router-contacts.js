@@ -1,4 +1,5 @@
 const Joi = require('joi');
+const mongoose = require('mongoose')
 
 const schemaCreateContact = Joi.object({
     name: Joi.string().min(3).max(30).required(),
@@ -6,6 +7,14 @@ const schemaCreateContact = Joi.object({
     phone: Joi.string().min(1).max(15).required(),
 })
     
+const schemaQueryContact = Joi.object({
+    limit: Joi.number().integer().min(1).max(20).optional(),
+    offset: Joi.number().integer().min(0).optional(),
+    favorite: Joi.boolean().optional(),
+    // filter: Joi.boolean().valid("favorite").optional(),
+})
+
+
 const schemaUpdateContact = Joi.object({
     name: Joi.string().min(3).max(30).optional(),
     email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }).optional(),
@@ -23,10 +32,17 @@ const validate = async (schema, obj, next) => {
 }
     catch (err) {
         console.log(err);
-    next({ status: 400, message: err.message})}
+        next({
+            status: 400,
+            message: err.message
+        })
+    }
 }
 
 module.exports = {
+     validationQueryContact: async (req, res, next) => {
+        return await validate(schemaQueryContact, req.query, next)
+    },
     validationCreateContact: async (req, res, next) => {
         return await validate(schemaCreateContact, req.body, next)
     },
@@ -34,7 +50,7 @@ module.exports = {
         return await validate(schemaUpdateContact, req.body, next)
     },
     validationUpdateStatusContact: async (req, res, next) => {
-        
         return await validate(schemaUpdateStatusContact, req.body, next)
-     }
+    }
+    
 }
