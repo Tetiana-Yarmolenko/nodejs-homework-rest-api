@@ -49,25 +49,15 @@ const create = async (req, res, next) => {
    try {
     const userId = req.user?.id
      const contact = await Contact.addContact(userId, req.body);
-     const { name, email, phone } = req.body;
-    if (name && email && phone) {
-      return res.json({
-        status: 'success',
-        code: HttpCode.OK,
-        data: {
-          contact,
-        },
-      })
-    }
-    else {
-      return res.status(HttpCode.NOT_FOUND).json({
-        status: 'error',
-        code: HttpCode.NOT_FOUND,
-        message: "missing required name field",
-      })
-    }
+      return res.status(HttpCode.CREATED).json({
+      status: "success",
+      code: HttpCode.CREATED,
+      data: {
+        contact,
+      },
+    });
   } catch (error) {
-    next(error)
+    next(error);
   }
 }
 
