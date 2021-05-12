@@ -2,12 +2,21 @@ const jwt = require('jsonwebtoken')
 const jimp = require('jimp')
 const fs = require('fs/promises')
 const path = require('path')
-
+var cloudinary = require('cloudinary').v2
+const { promisify } = require('util')
 require('dotenv').config()
 const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY
-
 const Users = require('../model/users')
 const { HttpCode } = require('../helpers/constants')
+
+
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.API_KEY_CLOUD,
+  api_secret: process.env.API_SECRET_CLOUD,
+})
+
+const uploadToCloud = promisify(cloudinary.uploader.upload)
 
 const signup = async (req, res, next) => {
   const { email } = req.body
@@ -88,17 +97,31 @@ const current = async (req, res, next) => {
     next(error);
   }
 }
+// const updateAvatar = async (req, res, next) => {
+//   const { id } = req.user
+//   const avatarUrl = await saveAvatarUser(req)
+//  
+//   await Users.updateAvatar(id, avatarUrl)
+//   return res.status(HttpCode.OK)
+//     .json({
+//       status: "success",
+//       code: HttpCode.OK,
+//       data: {avatarUrl}
+//     })
+// }
+
+// оновлення аватару через використання cloudinary:
+
 const updateAvatar = async (req, res, next) => {
   const { id } = req.user
-  const avatarUrl = await saveAvatarUser(req)
-  await Users.updateAvatar(id, avatarUrl)
+  const {idCloudAvatar, avatarUrl}= await saveAvatarUserToCloud(req)
+  await Users.updateAvatar(id, avatarUrl, idCloudAvatar)
   return res.status(HttpCode.OK)
     .json({
       status: "success",
       code: HttpCode.OK,
       data: {avatarUrl}
     })
-  
 }
 
 const saveAvatarUser = async (req) => {
@@ -127,7 +150,21 @@ const FOLDER_AVATARS = process.env.FOLDER_AVATARS
   return path.join(FOLDER_AVATARS, newNameAvatar).replace('\\', '/')
 }
 
-module.exports = {
+// збереження аватару через використання cloudinary:
+const saveAvatarUserToCloud = async (req) => {
+  const pathFile = req.file.path
+  const {
+    public_id: idCloudAvatar,
+    secure_url: avatarUrl,
+  } = await uploadToCloud(pathFile, {
+    public_id: req.user.idCloudAvatar?.replace('Avatars/', ''),
+    folder: 'Avatars',
+    transformation: { width: 250, height: 250, crop: 'pad' },
+  })
+  await fs.unlink(pathFile)
+  return { idCloudAvatar, avatarUrl}
+}
+module.exports = { 
   signup,
   login,
   logout,

@@ -11,7 +11,11 @@ npm install joi
 5.4 Написать unit-тесты для мидлвара по авторизации - npm install --save-dev jest
 5.5 Написать e2e (приемочные) тесты для ендпоинта обновления аватарок - npm install supertest --save-dev
 
+5.6 npm install cloudinary -E - для фото
+
 зміни в 1 файлі
 git add .env
 git commit -m "change"
 git push origin master
+
+

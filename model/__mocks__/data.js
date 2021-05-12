@@ -10,7 +10,7 @@ const contacts = [
     name : "Chaim Lewis", 
     email : "dui.in@egetlacus.ca", 
     phone : "(294) 840-6685", 
-    favorite : true
+    favorite : false
   },
 ]
 
@@ -24,7 +24,6 @@ const User = {
     email: "Raisa@retac.com",
     password: "$2a$06$gQBOm1zb6tLKRQJ8r0878uOOuhL/3/6maFu3FS5HVYa90UNsth7Fa",
     _id: "6097c0b153d55f41a08d3aa3",
-    id: "6097c0b153d55f41a08d3aa3",
     subscription: "starter",
     token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwOTdjMGIxNTNkNTVmNDFhMDhkM2FhMyIsImlhdCI6MTYyMDU1ODA3OSwiZXhwIjoxNjIwNTY1Mjc5fQ.Y8sphmpszgxtaTfwJCk1PQW8uH7tzb3LZ3nBQb3KtKc",
     createdAt: "2021-05-09T11:00:01.017+0000",
@@ -37,6 +36,6 @@ const User = {
 const users = []
 users[0] = User
 
-const newUser = { email: 'test@test.com', password: '123456' }
+const newUser = { email: 'mytest@test.com', password: '123456' }
 
 module.exports = { contacts, newContact, User, users, newUser }

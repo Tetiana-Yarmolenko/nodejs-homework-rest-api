@@ -1,23 +1,6 @@
 // const guard = require("../helpers/guard")
 // const { HttpCode } = require('../helpers/constants')
 // const {User} = require('../model/__mocks__/data')
-// // const { json } = require("express")
-
-// describe('Unit test: helper/guard', () => {
-//     const req = { user: User }
-//     const res = {
-//         status: jest.fn().mockReturnThis(),
-//         json: jest.fn((response) => response)
-//     }
-//     const next = jest.fn()
-
-//     test('run function with right', () => { })
-//     test ('run function with wrong role', () => {})
-// })
-
-// const guard = require('../helpers/guard')
-// const { HttpCode } = require('../helpers/constants')
-// const { User } = require('../model/__mocks__/data')
 // const passport = require('passport')
 
 // describe('Unit test: helper/guard', () => {

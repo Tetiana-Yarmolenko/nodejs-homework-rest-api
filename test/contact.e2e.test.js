@@ -2,7 +2,7 @@ const request = require('supertest')
 const jwt = require('jsonwebtoken')
 const app = require('../app')
 const { User, contacts, newContact } = require('../model/__mocks__/data')
-// const { set } = require('../app')
+
 
 require('dotenv').config()
 
@@ -124,6 +124,71 @@ describe('Testing the route api/contacts', () => {
       done()
     })
       
+    })
+  
+  describe('should handle PATCH request', () => {
+    test('should return 200 status for PATC: /contacts/:contactId/favorite', async (done) => {
+      const res = await request(app)
+        .patch(`/api/contacts/${idNewContact}/favorite`)
+        .set('Authorization', `Bearer ${token}`)
+        .set('Accept', 'application/json')
+        .send({ favorite: true })
+      expect(res.status).toEqual(200)
+      expect(res.body).toBeDefined()
+      expect(res.body.data.contact.favorite).toBe(true)
+      done()
+    })
+    test('should return 400 status for PATC: /contacts/:contactId/favorite wrong field', async (done) => {
+      const res = await request(app)
+        .patch(`/api/contacts/${idNewContact}/favorite`)
+        .set('Authorization', `Bearer ${token}`)
+        .set('Accept', 'application/json')
+        .send({ test: 1 })
+      expect(res.status).toEqual(400)
+      expect(res.body).toBeDefined()
+      done()
+    })
+    test('should return 404 status for  PATCH: /contacts/:contactId/favorite ', async (done) => {
+      const res = await request(app)
+        .patch('/api/contacts/6083fa09f0d5f478851219f8/favorite')
+        .set('Authorization', `Bearer ${token}`)
+        .set('Accept', 'application/json')
+        .send({ favorite: true })
+      expect(res.status).toEqual(404)
+      expect(res.body).toBeDefined()
+      done()
+    })
+  })
+
+  describe('should handle DELETE request', () => {
+    const contact = contacts[1]
+    test('should return 200 status DELETE: /contacts/:contactId', async (done) => {
+      const res = await request(app)
+        .delete(`/api/contacts/${contact._id}`)
+        .set('Authorization', `Bearer ${token}`)
+
+      expect(res.status).toEqual(200)
+      expect(res.body).toBeDefined()
+      expect(res.body.data.contact).toStrictEqual(contact)
+      done()
+    })
+    test('should return 400 status for DELETE: /contacts/:contactId wrong field', async (done) => {
+      const res = await request(app)
+        .delete(`/api/contacts/1234`)
+        .set('Authorization', `Bearer ${token}`)
+
+      expect(res.status).toEqual(400)
+      expect(res.body).toBeDefined()
+      done()
+    })
+    test('should return 404 status for DELETE: /contacts/:contactId ', async (done) => {
+      const res = await request(app)
+        .delete('/api/contacts/60f91cf0d5f477551219ec')
+        .set('Authorization', `Bearer ${token}`)
+      expect(res.status).toEqual(404)
+      expect(res.body).toBeDefined()
+      done()
+    })
   })
     
 })

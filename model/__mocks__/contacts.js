@@ -1,4 +1,4 @@
-const { contacts } = require('./data')
+const {  contacts } = require('./data')
 
 const listContacts = jest.fn((userId, query) => {
     const { limit = 20, offset = 0} = query
@@ -6,7 +6,7 @@ const listContacts = jest.fn((userId, query) => {
 })
 
 const getContactById = jest.fn((userId, contactId) => {
-  const [result] = contacts.filter((el) => String(el._id) == String(contactId))
+  const [result] =  contacts.filter((el) => String(el._id) == String(contactId))
   return result
 } )
 

@@ -1,5 +1,6 @@
 const { User, users } = require('./data')
 const bcrypt = require('bcryptjs')
+const SALT_WORK_FACTOR = 10
 
 const findById = jest.fn((id) => {
    const [user] = users.filter((el) => String(el._id) === String(id))
@@ -7,24 +8,24 @@ const findById = jest.fn((id) => {
 })
 
 const findByEmail = jest.fn((email) => {
-    const [user] = user.filter((el) => String(el.email) === String(email))
+    const [user] = users.filter((el) => String(el.email) === String(email))
    return user
 })
 
 const create = jest.fn(({ email, password }) => {
-    // const newUser = {
-    //   email,
-    //   password: pass,
-    //     subscription,
-    //   _id: ''
-    // }
-    return {}
+    pass = bcrypt.hashSync(password, bcrypt.genSaltSync(SALT_WORK_FACTOR), null)
+  const newUser = {
+      email,
+      password: pass,
+      subscription,
+    _id: '6097c0b153d55f41a08d3aa3',
+     validPassword: function (pass) {
+        return bcrypt.compareSync(pass, this.password)
+      },
+  }
+  users.push(newUser)
+    return newUser
 })
-
-// const create = async (userOptions) => {
-//   const user = new User(userOptions)
-//   return await user.save()
-// }
 
 const updateToken = jest.fn((id, token) => {
   return {}
@@ -35,10 +36,12 @@ const getCurrentUser = jest.fn((id, token) => {
   return {}
 })
 
-const updateAvatar = jest.fn((id, token) => {
-  return {}
+const updateAvatar = jest.fn((id, avatar, idCloudAvatar = null ) => {
+  const [user] = users.filter((el) => String(el._id) === String(id))
+  user.avatar = avatar
+  user.idCloudAvatar =idCloudAvatar
+  return user
 })
-
 
 
 module.exports = {
