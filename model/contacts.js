@@ -42,7 +42,6 @@ const updateContact = async (userId, contactId, body) => {
     {...body},
     {new: true}
 )
-  console.log(result);
   return result
 };
 
