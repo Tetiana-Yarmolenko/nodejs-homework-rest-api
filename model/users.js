@@ -1,3 +1,4 @@
+const { verify } = require('jsonwebtoken')
 const User = require('./schemas/user')
 
 const findById = async (id) => {
@@ -6,6 +7,9 @@ const findById = async (id) => {
 
 const findByEmail = async (email) => {
   return await User.findOne({ email })
+}
+const findByVerifyTokenEmail = async (token) => {
+  return await User.findOne({ verifyTokenEmail: token })
 }
 
 const create = async (userOptions) => {
@@ -26,13 +30,19 @@ const updateAvatar = async (id, avatar, idCloudAvatar = null ) => {
   return await User.updateOne({ _id: id }, { avatar, idCloudAvatar })
 }
 
+const updateVerifyToken = async (id, verify, verifyToken) => {
+  return await User.updateOne({ _id: id }, {verify, verifyTokenEmail: verifyToken},)
+}
+
 
 
 module.exports = {
   findById,
   findByEmail,
+  findByVerifyTokenEmail,
   create,
   updateToken,
   getCurrentUser,
-  updateAvatar
+  updateAvatar,
+  updateVerifyToken
 }

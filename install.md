@@ -13,9 +13,12 @@ npm install joi
 
 5.6 npm install cloudinary -E - для фото
 
+6.1 npm install --save @sendgrid/mail або
+npm install nodemailer - предназначенный для отправки электронных писем
+6.2 npm install mailgen --save - имейл верстка
+6.3 npm install nanoid - генератор токіна
+
 зміни в 1 файлі
 git add .env
 git commit -m "change"
 git push origin master
-
-
