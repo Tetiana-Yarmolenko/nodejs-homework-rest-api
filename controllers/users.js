@@ -21,7 +21,7 @@ cloudinary.config({
 const uploadToCloud = promisify(cloudinary.uploader.upload)
 
 const signup = async (req, res, next) => {
-  const { email,} = req.body
+  const { email} = req.body
   const user = await Users.findByEmail(email)
   if (user) {
     return res.status(HttpCode.CONFLICT).json({
@@ -207,13 +207,13 @@ const repeatEmailVerify = async (req, res, next) => {
        const emailService = new EmailService(process.env.NODE_ENV)
       await emailService.sendVerifyEmail(verifyTokenEmail, email)
     }
-    //   if (!req.body.email) {
-    //   return res.status(HttpCode.BAD_REQUEST).json({
-    //    status: 'error',
-    //   code: HttpCode.BAD_REQUEST,
-    //    message: "missing required field email"
-    //   })
-    // }
+      if (!req.body.email) {
+      return res.status(HttpCode.BAD_REQUEST).json({
+       status: 'error',
+      code: HttpCode.BAD_REQUEST,
+       message: "missing required field email"
+      })
+    }
     return res.status(HttpCode.BAD_REQUEST).json({
       status: 'error',
       code: HttpCode.BAD_REQUEST,
